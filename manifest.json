@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "PX MANAGER",
+  "version": "1.4.2",
+  "description": "Central de ocorrências logística: Scanner de picking, tratativas de cancelamento e automação de mensagens para lojas.",
+  "author": "PX Station",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
+  "action": { 
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  },
+  "permissions": [
+    "storage", 
+    "clipboardWrite", 
+    "activeTab", 
+    "scripting",
+    "tabs",
+    "notifications"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": [
+    "https://router.huggingface.co/*", 
+    "https://picking-admin.backoffice.gpa.digital/*"
+  ],
+  "content_scripts": [{
+    "matches": [
+      "https://picking-admin.backoffice.gpa.digital/ocorrencias/bandeira/*/pedido/*/detalhe/*"
+    ],
+    "js": ["content.js"],
+    "run_at": "document_start"
+  }],
+  "web_accessible_resources": [{
+    "resources": ["popup.html", "popup.js", "icon.png"],
+    "matches": ["https://picking-admin.backoffice.gpa.digital/*"]
+  }]
+}

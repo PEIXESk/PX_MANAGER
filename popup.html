@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <style>
+        :root { 
+            --verde-main: #53C14B; 
+            --verde-dark: #3A8034;
+            --verde-glow: rgba(83, 193, 75, 0.4);
+            --laranja-main: #F39221;
+            --laranja-dark: #C1741A;
+            --roxo-fundo: #441F54;
+            --cinza-detalhe: #2B2B2B;
+            --glass-border: rgba(83, 193, 75, 0.3);
+        }
+
+        body::-webkit-scrollbar { display: none; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--roxo-fundo) !important;
+            color: #ffffff; margin: 0; padding: 15px; width: 450px; height: 680px;
+            overflow-y: scroll; overflow-x: hidden; scrollbar-width: none;
+            box-sizing: border-box; border: 1px solid var(--glass-border); border-radius: 15px;
+        }
+
+        .screen { display: none; flex-direction: column; gap: 12px; }
+        .active { display: flex; }
+
+        .card { 
+            background: rgba(43, 43, 43, 0.7); 
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border); 
+            border-left: 4px solid var(--verde-main);
+            padding: 15px; margin-bottom: 5px;
+            border-radius: 0 10px 10px 0;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+        }
+
+        label { 
+            font-size: 0.7rem; font-weight: 900; color: var(--laranja-main); 
+            text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; display: block;
+        }
+
+        input, textarea { 
+            width: 100%; padding: 10px; border: 1px solid var(--cinza-detalhe); 
+            background: rgba(0, 0, 0, 0.3); color: #fff; font-size: 0.9rem; 
+            box-sizing: border-box; outline: none; transition: 0.3s; border-radius: 4px;
+        }
+
+        input:focus { border-color: var(--verde-main); box-shadow: 0 0 10px var(--verde-glow); }
+
+        button { 
+            cursor: pointer; border: 1px solid var(--verde-main); padding: 12px; 
+            background: rgba(83, 193, 75, 0.05); color: var(--verde-main); font-weight: 900;
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s;
+            border-radius: 4px;
+        }
+
+        button:hover { background: var(--verde-main); color: #fff; box-shadow: 0 0 15px var(--verde-glow); }
+
+        #btnLimpar { border-color: var(--laranja-main); color: var(--laranja-main); background: rgba(243, 146, 33, 0.05); }
+        #btnLimpar:hover { background: var(--laranja-main); color: #fff; box-shadow: 0 0 15px rgba(243, 146, 33, 0.4); }
+
+        #btnWA { border-color: #25d366 !important; color: #25d366 !important; }
+        #btnWA:hover { background: #25d366 !important; color: #fff !important; }
+
+        .xp-bar { background: var(--cinza-detalhe); height: 10px; border-radius: 5px; position: relative; overflow: hidden; }
+        .xp-fill { background: linear-gradient(90deg, var(--verde-dark), var(--verde-main)); height: 100%; width: 0%; transition: 1.2s ease-in-out; }
+
+        h2 { text-align: center; color: var(--verde-main); font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+        #resultado { background: rgba(0,0,0,0.4); border: 1px solid var(--laranja-dark); color: #e0e0e0; }
+    </style>
+</head>
+<body>
+    <div id="loginScreen" class="screen active">
+        <h2 style="margin-top:100px;">PX MANAGER</h2>
+        <div class="card">
+            <label>Neural ID (Nome Agente)</label>
+            <input type="text" id="nomeAgenteInput" placeholder="Identifique-se...">
+            <button id="btnEntrar" style="width: 100%; margin-top: 15px;">Conectar</button>
+        </div>
+    </div>
+
+    <div id="mainScreen" class="screen">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span id="rankIcon" style="font-size: 1.5rem;">🐣</span>
+            <div style="flex: 1;">
+                <div style="display:flex; justify-content: space-between; font-size: 0.7rem; margin-bottom: 2px;">
+                    <span id="rankName" style="color:var(--verde-main); font-weight: bold;">OPERATIVO</span>
+                    <span id="xpText" style="color:var(--verde-main)">0 XP</span>
+                </div>
+                <div class="xp-bar"><div class="xp-fill" id="xpBarFill"></div></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <button id="btnCapturar" style="width: 100%; margin-bottom: 10px; border-style: dashed;">🔍 SCANNER DE DADOS 3.0</button>
+            <div style="display:flex; gap:8px;">
+                <div style="flex:1"><label>Loja</label><input id="loja"></div>
+                <div style="flex:2"><label>Pedido</label><input id="pedido"></div>
+            </div>
+            <label>Cliente</label><input id="cliente">
+            <label>Tipo de Ocorrência</label>
+            <input id="ocorrencia" placeholder="Auto-detectando...">
+            <label>Relatório Técnico</label>
+            <textarea id="Descricao" rows="2" placeholder="Descreva os detalhes..."></textarea>
+            <div style="display:flex; gap:8px; margin-top:10px;">
+                <button id="btnGerar" style="flex:2;">EXECUTAR</button>
+                <button id="btnLimpar" style="flex:0.5;">DEL</button>
+            </div>
+        </div>
+
+        <div class="card" style="flex:1; display:flex; flex-direction:column; gap:8px;">
+            <label>Mensagem Formatada</label>
+            <textarea id="resultado" style="flex:1; min-height: 80px;"></textarea>
+            <button id="btnCopiar" style="width:100%">📋 COPIAR MENSAGEM</button>
+            <button id="btnWA" style="width:100%">WHATSAPP WEB</button>
+            <p id="exibeAgente" style="text-align:center; font-size: 0.6rem; opacity: 0.6; margin: 5px 0;">STATION: ONLINE</p>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html>
